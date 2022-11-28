@@ -13,7 +13,7 @@ steps:
   displayName: 'docker login'
 
 - script: docker push $(acrName).azurecr.io/$(imageName)
-  displayName: 'docker push'
+  displayName: 'dff docker push'
 
 # Publish YAML for Kubernetes deployment
 - task: PublishBuildArtifacts@1
