@@ -1,0 +1,23 @@
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+variables:
+  imageName: 'ssnginx:$(Build.BuildId)'
+  # define three more variables acrName, dockerId and dockerPassword in the build pipeline in UI
+
+steps:
+- script: docker build -f **/Dockerfile -t $(acrName).azurecr.io/$(imageName) .
+  displayName: 'docker build'
+
+- script: docker login -u $(dockerId) -p $(dockerPassword) $(acrName).azurecr.io
+  displayName: 'docker login'
+
+- script: docker push $(acrName).azurecr.io/$(imageName)
+  displayName: 'docker push'
+
+# Publish YAML for Kubernetes deployment
+- task: PublishBuildArtifacts@1
+  displayName: 'publish yaml folder as an artifact'
+  inputs:
+    artifactName: 'yaml'
+    pathToPublish: 'InfraCode/yaml'
